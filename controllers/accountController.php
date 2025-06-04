@@ -124,7 +124,7 @@ function handleGetUser()
     echo json_encode(['error' => 'Invalid User ID']);
     return;
   }
-
+  
   $pdo = getDb();
   $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
   $stmt->execute([$userId]);
