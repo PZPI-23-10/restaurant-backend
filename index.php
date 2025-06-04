@@ -52,7 +52,7 @@ switch (true) {
         handleRegister();
         break;
 
-    case $method === 'POST' && str_ends_with($path, '/api/account/login/'):
+    case $method === 'POST' && str_ends_with($path, '/api/account/login'):
         handleLogin();
         break;
 
