@@ -9,24 +9,30 @@ foreach (glob(__DIR__ . "/controllers/*.php") as $filename) {
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-$config = [
-    'allowed_origins' => [
-        'http://localhost:5291',
-        'http://localhost:56082',
-        'https://your-production-client.com',
-    ],
+$allowedOrigins = [
+    'http://localhost:5291',
+    'http://localhost:56082',
+    'https://your-production-client.com'
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header("Access-Control-Allow-Origin: *");
+}
+
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true");
 
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
+
+header('Content-Type: application/json');
 
 function loadEnv($path = __DIR__ . '/.env')
 {
@@ -40,8 +46,6 @@ function loadEnv($path = __DIR__ . '/.env')
         putenv(trim($key) . '=' . trim($value));
     }
 }
-
-header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -107,9 +111,9 @@ switch (true) {
     case $method === 'GET' && str_ends_with($path, '/api/reviews/restaurant'):
         handleGetRestaurantReviews();
         break;
-    
+
     //TAGS
-    case $method === 'GET'&& str_ends_with($path, '/api/tag/'):
+    case $method === 'GET' && str_ends_with($path, '/api/tag/'):
         handleGetTags();
         break;
     default:
