@@ -3,22 +3,24 @@ require_once 'db.php';
 require_once 'middleware.php';
 require_once 'services/jwtService.php';
 
-function handleGetTags() {
-  $pdo = getDb();
+function handleGetTags()
+{
+    header('Content-Type: application/json');
+    $pdo = getDb();
 
-  $tags = getMany($pdo, "SELECT * FROM tags", []);
-  $cuisines = getMany($pdo, "SELECT * FROM cuisines", []);
-  $dressCodes = getMany($pdo, "SELECT * FROM dress_codes", []);
+    $tags = getMany($pdo, "SELECT * FROM tags", []);
+    $cuisines = getMany($pdo, "SELECT * FROM cuisines", []);
+    $dressCodes = getMany($pdo, "SELECT * FROM dress_codes", []);
 
-  if (empty($tags) && empty($cuisines) && empty($dressCodes)) {
-    http_response_code(404);
-    echo json_encode(['error' => 'No tags found.']);
-    return;
-  }
+    if (empty($tags) && empty($cuisines) && empty($dressCodes)) {
+        http_response_code(404);
+        echo json_encode(['error' => 'No tags found.']);
+        return;
+    }
 
-  echo json_encode([
-    'tags' => $tags,
-    'cuisines' => $cuisines,
-    'dressCodes' => $dressCodes
-  ]);
+    echo json_encode([
+        'tags' => $tags,
+        'cuisines' => $cuisines,
+        'dressCodes' => $dressCodes
+    ]);
 }
