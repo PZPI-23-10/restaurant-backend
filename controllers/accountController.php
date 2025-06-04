@@ -3,7 +3,8 @@ require_once 'db.php';
 require_once 'middleware.php';
 require_once 'services/jwtService.php';
 
-function handleRegister() {
+function handleRegister()
+{
   $data = json_decode(file_get_contents("php://input"), true);
 
   $required = ['firstName', 'middleName', 'lastName', 'email', 'password', 'city', 'street'];
@@ -31,8 +32,10 @@ function handleRegister() {
     return;
   }
 
-  if (!preg_match('/^[a-zA-Z0-9!@#$%^&*]+$/', $data['password']) ||
-      !preg_match('/[!@#$%^&*]/', $data['password'])) {
+  if (
+    !preg_match('/^[a-zA-Z0-9!@#$%^&*]+$/', $data['password']) ||
+    !preg_match('/[!@#$%^&*]/', $data['password'])
+  ) {
     http_response_code(400);
     echo json_encode(['error' => 'Password must contain special characters.']);
     return;
@@ -43,14 +46,20 @@ function handleRegister() {
   $stmt = $pdo->prepare("INSERT INTO users (first_name, middle_name, last_name, email, password, city, street)
                          VALUES (?, ?, ?, ?, ?, ?, ?)");
   $stmt->execute([
-    $data['firstName'], $data['middleName'], $data['lastName'],
-    $data['email'], $hash, $data['city'], $data['street']
+    $data['firstName'],
+    $data['middleName'],
+    $data['lastName'],
+    $data['email'],
+    $hash,
+    $data['city'],
+    $data['street']
   ]);
 
   echo json_encode(['status' => 'Ok']);
 }
 
-function handleLogin() {
+function handleLogin()
+{
   $data = json_decode(file_get_contents("php://input"), true);
   if (empty($data['email']) || empty($data['password'])) {
     http_response_code(400);
@@ -80,7 +89,8 @@ function handleLogin() {
   echo json_encode(['userId' => $user['id'], 'token' => $token]);
 }
 
-function handleEditUser() {
+function handleEditUser()
+{
   $data = json_decode(file_get_contents("php://input"), true);
   $user = $_SERVER['user'] ?? null;
   if (!$user) {
@@ -92,15 +102,20 @@ function handleEditUser() {
   $pdo = getDb();
   $stmt = $pdo->prepare("UPDATE users SET email = ?, city = ?, street = ?, first_name = ?, middle_name = ?, last_name = ? WHERE id = ?");
   $stmt->execute([
-    $data['email'], $data['city'], $data['street'],
-    $data['firstName'], $data['middleName'], $data['lastName'],
+    $data['email'],
+    $data['city'],
+    $data['street'],
+    $data['firstName'],
+    $data['middleName'],
+    $data['lastName'],
     $user['sub']
   ]);
 
   echo json_encode(['status' => 'ok']);
 }
 
-function handleGetUser() {
+function handleGetUser()
+{
   $data = json_decode(file_get_contents("php://input"), true);
   $userId = $data['userId'] ?? null;
 
@@ -124,7 +139,8 @@ function handleGetUser() {
   echo json_encode($user);
 }
 
-function handleManageableRestaurants() {
+function handleManageableRestaurants()
+{
   $user = $_SERVER['user'] ?? null;
   if (!$user) {
     http_response_code(401);

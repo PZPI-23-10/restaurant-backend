@@ -91,6 +91,20 @@ switch (true) {
         handleEditRestaurant();
         break;
 
+    //REVIEWS
+    case $method === 'POST' && str_ends_with($path, '/api/reviews'):
+        authMiddleware();
+        handleCreateReview();
+        break;
+
+    case $method === 'GET' && str_ends_with($path, '/api/reviews/user'):
+        handleGetUserReviews();
+        break;
+
+    case $method === 'GET' && str_ends_with($path, '/api/reviews/restaurant'):
+        handleGetRestaurantReviews();
+        break;
+
     default:
         http_response_code(404);
         echo json_encode(['error' => 'Not Found']);
