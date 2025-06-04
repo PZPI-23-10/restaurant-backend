@@ -1,63 +1,7 @@
 <?php
 require_once 'db.php';
+require_once 'middleware.php';
 require_once 'services/jwtService.php';
-
-header('Content-Type: application/json');
-
-$method = $_SERVER['REQUEST_METHOD'];
-$path = $_SERVER['REQUEST_URI'];
-
-switch (true) {
-  case $method === 'POST' && str_ends_with($path, '/api/account/register'):
-    handleRegister();
-    break;
-
-  case $method === 'POST' && str_ends_with($path, '/api/account/login'):
-    handleLogin();
-    break;
-
-  case $method === 'POST' && str_ends_with($path, '/api/account/editUser'):
-    authMiddleware();
-    handleEditUser();
-    break;
-
-  case $method === 'POST' && str_ends_with($path, '/api/account'):
-    handleGetUser();
-    break;
-
-  case $method === 'GET' && str_ends_with($path, '/api/account/manageableRestaurants'):
-    authMiddleware();
-    handleManageableRestaurants();
-    break;
-
-  default:
-    http_response_code(404);
-    echo json_encode(['error' => 'Not Found']);
-    break;
-}
-
-function authMiddleware() {
-  $headers = getallheaders();
-  if (!isset($headers['Authorization'])) {
-    http_response_code(401);
-    exit(json_encode(['error' => 'Unauthorized']));
-  }
-
-  $matches = [];
-  if (!preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
-    http_response_code(401);
-    exit(json_encode(['error' => 'Invalid token format']));
-  }
-
-  $token = $matches[1];
-  try {
-    $payload = decode_jwt($token);
-    $_SERVER['user'] = $payload;
-  } catch (Exception $e) {
-    http_response_code(401);
-    exit(json_encode(['error' => 'Invalid token']));
-  }
-}
 
 function handleRegister() {
   $data = json_decode(file_get_contents("php://input"), true);

@@ -2,13 +2,14 @@
 loadEnv("appsettings.env");
 
 require 'vendor/autoload.php';
-require_once 'controllers/accountController.php';
+foreach (glob(__DIR__ . "/controllers/*.php") as $filename) {
+    require_once $filename;
+}
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 $config = [
-    'jwt_secret' => 'your_secret_key',
     'allowed_origins' => [
         'http://localhost:5291',
         'http://localhost:56082',
@@ -24,12 +25,74 @@ if (in_array($origin, $config['allowed_origins'])) {
     header("Access-Control-Allow-Credentials: true");
 }
 
-function loadEnv($path = __DIR__ . '/.env') {
-  if (!file_exists($path)) return;
-  $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-  foreach ($lines as $line) {
-    if (str_starts_with(trim($line), '#')) continue;
-    [$key, $value] = explode('=', $line, 2);
-    putenv(trim($key) . '=' . trim($value));
-  }
+function loadEnv($path = __DIR__ . '/.env')
+{
+    if (!file_exists($path))
+        return;
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (str_starts_with(trim($line), '#'))
+            continue;
+        [$key, $value] = explode('=', $line, 2);
+        putenv(trim($key) . '=' . trim($value));
+    }
+}
+
+header('Content-Type: application/json');
+
+$method = $_SERVER['REQUEST_METHOD'];
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+switch (true) {
+    //ACCOUNT
+    case $method === 'POST' && str_ends_with($path, '/api/account/register'):
+        handleRegister();
+        break;
+
+    case $method === 'POST' && str_ends_with($path, '/api/account/login'):
+        handleLogin();
+        break;
+
+    case $method === 'POST' && str_ends_with($path, '/api/account/editUser'):
+        authMiddleware();
+        handleEditUser();
+        break;
+
+    case $method === 'POST' && str_ends_with($path, '/api/account'):
+        handleGetUser();
+        break;
+
+    case $method === 'GET' && str_ends_with($path, '/api/account/manageableRestaurants'):
+        authMiddleware();
+        handleManageableRestaurants();
+        break;
+
+    //RESTAURANTS
+    case $method === 'POST' && str_ends_with($path, '/api/restaurant/get'):
+        handleGetRestaurant();
+        break;
+
+    case $method === 'GET' && str_ends_with($path, '/api/restaurant'):
+        handleGetAllRestaurants();
+        break;
+
+    case $method === 'DELETE' && str_ends_with($path, '/api/restaurant'):
+        authMiddleware();
+        handleDeleteRestaurant();
+        break;
+
+    case $method === 'POST' && str_ends_with($path, '/api/restaurant/create'):
+        authMiddleware();
+        handleCreateRestaurant();
+        break;
+
+    case $method === 'POST' && str_ends_with($path, '/api/restaurant/edit'):
+        authMiddleware();
+        handleEditRestaurant();
+        break;
+
+    default:
+        http_response_code(404);
+        echo json_encode(['error' => 'Not Found']);
+        break;
 }

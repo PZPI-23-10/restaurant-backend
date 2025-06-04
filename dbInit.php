@@ -2,7 +2,6 @@
 require_once 'db.php';
 $db = getDb();
 
-
 $db->exec("
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -155,5 +154,71 @@ CREATE TABLE IF NOT EXISTS restaurant_photos (
 );
 ");
 
+$cuisines = [
+  'Українська кухня',
+  'Італійська кухня',
+  'Японська кухня',
+  'Французька кухня',
+  'Китайська кухня',
+  'Мексиканська кухня',
+  'Середземноморська кухня',
+  'Азійська кухня',
+  'Американська кухня',
+  'Вегетаріанська кухня',
+  'Веганська кухня'
+];
+
+foreach ($cuisines as $name) {
+  $stmt = $db->prepare("INSERT INTO cuisines (name) VALUES (?)");
+  $stmt->execute([$name]);
+}
+
+// Инициализация tags
+$tags = [
+  'Стейк-хаус',
+  'Морепродукти',
+  'Суші',
+  'Піца',
+  'Десерти',
+  'Кафе',
+  'Ресторан',
+  'Бар',
+  'Паб',
+  'Фаст-фуд',
+  'Їдальня',
+  'Бістро',
+  'Кондитерська',
+  'Винний бар',
+  'Кальян-бар'
+];
+
+foreach ($tags as $name) {
+  $stmt = $db->prepare("INSERT INTO tags (name) VALUES (?)");
+  $stmt->execute([$name]);
+}
+
+// Инициализация dress_codes
+$dressCodes = [
+  'Casual',
+  'Smart Casual',
+  'Business Casual',
+  'Formal',
+  'Business',
+  'No Dress Code',
+  'Cocktail Attire',
+  'Black Tie',
+  'White Party',
+  'Boho Chic',
+  'Creative Attire',
+  'Resort Wear',
+  'Glam Rock',
+  'Vintage Style',
+  'Eco Friendly'
+];
+
+foreach ($dressCodes as $name) {
+  $stmt = $db->prepare("INSERT INTO dress_codes (name) VALUES (?)");
+  $stmt->execute([$name]);
+}
 
 echo "База данных успешно инициализирована.";
