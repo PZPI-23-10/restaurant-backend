@@ -5,11 +5,6 @@ require_once 'services/jwtService.php';
 
 function handleGetTags()
 {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization, ngrok-skip-browser-warning");
-    header("Access-Control-Allow-Credentials: true");
-    header('Content-Type: application/json');
     $pdo = getDb();
 
     $tags = getMany($pdo, "SELECT * FROM tags", []);
