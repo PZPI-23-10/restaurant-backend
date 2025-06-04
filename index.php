@@ -48,63 +48,63 @@ $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 switch (true) {
     //ACCOUNT
-    case $method === 'POST' && str_ends_with($path, '/api/account/register'):
+    case $method === 'POST' && str_ends_with($path, '/api/account/register/'):
         handleRegister();
         break;
 
-    case $method === 'POST' && str_ends_with($path, '/api/account/login'):
+    case $method === 'POST' && str_ends_with($path, '/api/account/login/'):
         handleLogin();
         break;
 
-    case $method === 'POST' && str_ends_with($path, '/api/account/editUser'):
+    case $method === 'POST' && str_ends_with($path, '/api/account/editUser/'):
         authMiddleware();
         handleEditUser();
         break;
 
-    case $method === 'POST' && str_ends_with($path, '/api/account'):
+    case $method === 'POST' && str_ends_with($path, '/api/account/'):
         handleGetUser();
         break;
 
-    case $method === 'GET' && str_ends_with($path, '/api/account/manageableRestaurants'):
+    case $method === 'GET' && str_ends_with($path, '/api/account/manageableRestaurants/'):
         authMiddleware();
         handleManageableRestaurants();
         break;
 
     //RESTAURANTS
-    case $method === 'POST' && str_ends_with($path, '/api/restaurant/get'):
+    case $method === 'POST' && str_ends_with($path, '/api/restaurant/get/'):
         handleGetRestaurant();
         break;
 
-    case $method === 'GET' && str_ends_with($path, '/api/restaurant'):
+    case $method === 'GET' && str_ends_with($path, '/api/restaurant/'):
         handleGetAllRestaurants();
         break;
 
-    case $method === 'DELETE' && str_ends_with($path, '/api/restaurant'):
+    case $method === 'DELETE' && str_ends_with($path, '/api/restaurant/'):
         authMiddleware();
         handleDeleteRestaurant();
         break;
 
-    case $method === 'POST' && str_ends_with($path, '/api/restaurant/create'):
+    case $method === 'POST' && str_ends_with($path, '/api/restaurant/create/'):
         authMiddleware();
         handleCreateRestaurant();
         break;
 
-    case $method === 'POST' && str_ends_with($path, '/api/restaurant/edit'):
+    case $method === 'POST' && str_ends_with($path, '/api/restaurant/edit/'):
         authMiddleware();
         handleEditRestaurant();
         break;
 
     //REVIEWS
-    case $method === 'POST' && str_ends_with($path, '/api/reviews'):
+    case $method === 'POST' && str_ends_with($path, '/api/reviews/'):
         authMiddleware();
         handleCreateReview();
         break;
 
-    case $method === 'GET' && str_ends_with($path, '/api/reviews/user'):
+    case $method === 'GET' && str_ends_with($path, '/api/reviews/user/'):
         handleGetUserReviews();
         break;
 
-    case $method === 'GET' && str_ends_with($path, '/api/reviews/restaurant'):
+    case $method === 'GET' && str_ends_with($path, '/api/reviews/restaurant/'):
         handleGetRestaurantReviews();
         break;
 
