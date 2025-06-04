@@ -1,7 +1,6 @@
 <?php
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-require_once 'jwtService.php';
 
 
 function generate_jwt($id, $email, $rememberMe = false) {
