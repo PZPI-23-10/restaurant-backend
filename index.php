@@ -107,7 +107,11 @@ switch (true) {
     case $method === 'GET' && str_ends_with($path, '/api/reviews/restaurant'):
         handleGetRestaurantReviews();
         break;
-
+    
+    //TAGS
+    case $method === 'GET'&& str_ends_with($path, '/api/tag/'):
+        handleGetTags();
+        break;
     default:
         http_response_code(404);
         echo json_encode(['error' => 'Not Found']);
