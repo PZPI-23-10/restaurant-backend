@@ -99,7 +99,7 @@ switch (true) {
         break;
 
     //TAGS
-    case $method === 'GET' && str_ends_with($path, '/api/tag/'):
+    case $method === 'GET' && str_ends_with($path, '/api/tag'):
         handleGetTags();
         break;
     default:
