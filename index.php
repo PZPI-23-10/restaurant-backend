@@ -48,7 +48,12 @@ function loadEnv($path = __DIR__ . '/.env')
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$fullUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$script = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME']);
+$basePath = dirname($script);
+$path = str_replace($basePath, '', $fullUri);
 
 switch (true) {
     //ACCOUNT
