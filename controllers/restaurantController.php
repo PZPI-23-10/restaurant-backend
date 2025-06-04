@@ -225,7 +225,7 @@ function handleDeleteRestaurant()
     }
     $data = json_decode(file_get_contents('php://input'), true);
     $pdo = getDb();
-    $userId = $_SERVER['sub'];
+    $userId = $user['sub'];
 
     $stmt = $pdo->prepare("SELECT * FROM restaurants WHERE id = ? AND user_id = ?");
     $stmt->execute([$data['restaurantId'], $userId]);
