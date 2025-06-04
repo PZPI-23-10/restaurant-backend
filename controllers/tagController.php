@@ -22,10 +22,3 @@ function handleGetTags() {
     'dressCodes' => $dressCodes
   ]);
 }
-
-
-function getMany($pdo, $query, $params) {
-  $stmt = $pdo->prepare($query);
-  $stmt->execute($params);
-  return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
