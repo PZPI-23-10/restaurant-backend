@@ -15,7 +15,12 @@ function handleGetUserReviews()
     }
 
     $pdo = getDb();
-    $stmt = $pdo->prepare("SELECT * FROM reviews WHERE user_id = ?");
+    $stmt = $pdo->prepare("
+        SELECT r.id, r.rating, r.comment, r.restaurant_id, u.email AS email
+        FROM reviews r
+        JOIN users u ON r.user_id = u.id
+        WHERE r.user_id = ?
+    ");
     $stmt->execute([$userId]);
 
     $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -40,7 +45,13 @@ function handleGetRestaurantReviews()
     }
 
     $pdo = getDb();
-    $stmt = $pdo->prepare("SELECT * FROM reviews WHERE restaurant_id = ?");
+
+    $stmt = $pdo->prepare("
+        SELECT r.id, r.rating, r.comment, r.restaurant_id, u.email AS email
+        FROM reviews r
+        JOIN users u ON r.user_id = u.id
+        WHERE r.restaurant_id = ?
+    ");
     $stmt->execute([$restaurantId]);
 
     $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -52,6 +63,7 @@ function handleGetRestaurantReviews()
         echo json_encode(['error' => 'No reviews found for this restaurant.']);
     }
 }
+
 
 function handleCreateReview()
 {
