@@ -129,7 +129,7 @@ function handleCreateRestaurant()
     $pdo = getDb();
     $userId = $user['sub'];
 
-    $stmt = $pdo->prepare("INSERT INTO restaurants (name, description, city, region, street, email, layout, organization, photo_url, latitude, longitude, has_parking, accessible, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO restaurants (name, description, city, region, street, email, layout, organization, photoUrl, latitude, longitude, has_parking, accessible, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([
         $data['name'],
         $data['description'],
@@ -184,7 +184,7 @@ function handleEditRestaurant()
         return;
     }
 
-    $stmt = $pdo->prepare("UPDATE restaurants SET name = ?, description = ?, city = ?, region = ?, street = ?, email = ?, layout = ?, organization = ?, photo_url = ?, latitude = ?, longitude = ?, has_parking = ?, accessible = ? WHERE id = ?");
+    $stmt = $pdo->prepare("UPDATE restaurants SET name = ?, description = ?, city = ?, region = ?, street = ?, email = ?, layout = ?, organization = ?, photoUrl = ?, latitude = ?, longitude = ?, has_parking = ?, accessible = ? WHERE id = ?");
     $stmt->execute([
         $data['name'],
         $data['description'],
@@ -278,7 +278,7 @@ function insertRelatedEntities($pdo, $restaurantId, $data)
     }
 
     foreach ($data['dishes'] ?? [] as $dish) {
-        $stmt = $pdo->prepare("INSERT INTO dishes (title, photo_url, ingredients, price, weight, restaurant_id) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO dishes (title, photoUrl, ingredients, price, weight, restaurant_id) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $dish['name'],
             $dish['photoUrl'],
