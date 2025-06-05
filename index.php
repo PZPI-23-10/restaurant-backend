@@ -90,11 +90,11 @@ switch (true) {
         handleCreateReview();
         break;
 
-    case $method === 'GET' && str_ends_with($path, '/api/reviews/user'):
+    case $method === 'POST' && str_ends_with($path, '/api/reviews/user/'):
         handleGetUserReviews();
         break;
 
-    case $method === 'GET' && str_ends_with($path, '/api/reviews/restaurant'):
+    case $method === 'POST' && str_ends_with($path, '/api/reviews/restaurant/'):
         handleGetRestaurantReviews();
         break;
 

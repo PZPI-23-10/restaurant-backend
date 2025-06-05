@@ -5,7 +5,8 @@ require_once 'services/jwtService.php';
 
 function handleGetUserReviews()
 {
-    $userId = $_GET['id'];
+    $data = json_decode(file_get_contents('php://input'), true);
+    $userId = $data['userId'] ?? null;
 
     if (empty($userId)) {
         http_response_code(400);
@@ -29,7 +30,8 @@ function handleGetUserReviews()
 
 function handleGetRestaurantReviews()
 {
-    $restaurantId = $_GET['id'];
+    $data = json_decode(file_get_contents('php://input'), true);
+    $restaurantId = $data['restaurantId'] ?? null;
 
     if (empty($restaurantId)) {
         http_response_code(400);
